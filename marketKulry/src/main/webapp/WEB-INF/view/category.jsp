@@ -38,13 +38,14 @@
   
     <script>
         $(function () {
-			$(".goDetail").on("click", function(){
-				$("#cate").val("id");
-				$("#keyword").val("9535754395");
-				$("#searchForm").attr("action", "/detail");
-				$("#searchForm").submit();
-			});
         });
+        
+        function goDetail(id){
+			$("#cate").val("_id");
+			$("#keyword").val(id);
+			$("#searchForm").attr("action", "/detail");
+			$("#searchForm").submit();
+		}
     </script>
   
   <body>
@@ -55,21 +56,15 @@
     
 	  <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
 	    <div class="container">
-	      <a class="navbar-brand" href="/">Kurly Holic</a>
+	      <a class="navbar-brand" href="/main">Kurly Holic</a>
 	      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
 	        <span class="oi oi-menu"></span> Menu
 	      </button>
 	
 	      <div class="collapse navbar-collapse" id="ftco-nav">
 	        <ul class="navbar-nav ml-auto">
-<!-- 	          <li class="nav-item active"><a href="index.html" class="nav-link">Home</a></li> -->
-<!-- 	          <li class="nav-item"><a href="about.html" class="nav-link">About</a></li> -->
-<!-- 	          <li class="nav-item"><a href="tour.html" class="nav-link">Tour</a></li> -->
-<!-- 	          <li class="nav-item"><a href="hotel.html" class="nav-link">Hotels</a></li> -->
-<!-- 	          <li class="nav-item"><a href="blog.html" class="nav-link">Blog</a></li> -->
-<!-- 	          <li class="nav-item"><a href="contact.html" class="nav-link">Contact</a></li> -->
 	          <li class="nav-item"><a href="/mypage" class="nav-link"><span>마이페이지</span></a></li>
-	          <li class="nav-item cta"><a href="/login" class="nav-link"><span>로그인</span></a></li>
+	          <li class="nav-item cta"><a href="/logout" class="nav-link"><span>로그아웃</span></a></li>
 	        </ul>
 	      </div>
 	    </div>
@@ -77,15 +72,6 @@
     <!-- END nav -->
     
     <div class="hero-wrap" style="background-image: url('resources/assets/images/kurly/bg_kurly.png'); height: 470px !important; ">
-<!--       <div class="overlay"></div> -->
-<!--       <div class="container"> -->
-<!--         <div class="row no-gutters slider-text js-fullheight align-items-center justify-content-center" data-scrollax-parent="true"> -->
-<!--           <div class="col-md-9 ftco-animate text-center" data-scrollax=" properties: { translateY: '70%' }"> -->
-<!--             <p class="breadcrumbs" data-scrollax="properties: { translateY: '30%', opacity: 1.6 }"><span class="mr-2"><a href="index.html">Home</a></span> <span>Blog</span></p> -->
-<!--             <h1 class="mb-3 bread" data-scrollax="properties: { translateY: '30%', opacity: 1.6 }">Tips &amp; Articles</h1> -->
-<!--           </div> -->
-<!--         </div> -->
-<!--       </div> -->
     </div>
 
 
@@ -95,36 +81,34 @@
 			<c:forEach var="item" items="${list.hits }">
 	          <div class="col-md-3 d-flex ftco-animate">
 	            <div class="blog-entry align-self-stretch" style="width: 100%;">
-	              <a href="#" class="block-20 goDetail" style="background-image: url('resources/assets/images/kurly/rice2.jpg');">
+	              <a href="#" class="block-20" onclick="javascript:goDetail('${item._id }')" style="background-image: url('resources/assets/images/kurly/${item._source.category }.jpg');">
 	              </a>
 	              <div class="text p-4 d-block">
 	              	<span class="tag"></span>
 	                <h3 class="heading mt-3"><a href="#">${item._source.name }</a></h3>
 	                <div class="meta mb-3">
 	                  <div><a href="#"><fmt:formatNumber type="number" maxFractionDigits="3" value="${item._source.reduced_price }" /> 원</a></div>
-<!-- 	                  <div><a href="#">Admin</a></div> -->
-<!-- 	                  <div><a href="#" class="meta-chat"><span class="icon-chat"></span> 3</a></div> -->
 	                </div>
 	              </div>
 	            </div>
 	          </div>
 	       </c:forEach>
        </div>
-        <div class="row mt-5">
-          <div class="col text-center">
-            <div class="block-27">
-              <ul>
-                <li><a href="#">&lt;</a></li>
-                <li class="active"><span>1</span></li>
-                <li><a href="#">2</a></li>
-                <li><a href="#">3</a></li>
-                <li><a href="#">4</a></li>
-                <li><a href="#">5</a></li>
-                <li><a href="#">&gt;</a></li>
-              </ul>
-            </div>
-          </div>
-        </div>
+<!--         <div class="row mt-5"> -->
+<!--           <div class="col text-center"> -->
+<!--             <div class="block-27"> -->
+<!--               <ul> -->
+<!--                 <li><a href="#">&lt;</a></li> -->
+<!--                 <li class="active"><span>1</span></li> -->
+<!--                 <li><a href="#">2</a></li> -->
+<!--                 <li><a href="#">3</a></li> -->
+<!--                 <li><a href="#">4</a></li> -->
+<!--                 <li><a href="#">5</a></li> -->
+<!--                 <li><a href="#">&gt;</a></li> -->
+<!--               </ul> -->
+<!--             </div> -->
+<!--           </div> -->
+<!--         </div> -->
       </div>
     </section>
 

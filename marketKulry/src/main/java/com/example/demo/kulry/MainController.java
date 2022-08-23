@@ -1,12 +1,17 @@
 package com.example.demo.kulry;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 public class MainController {
@@ -14,7 +19,7 @@ public class MainController {
 	@Autowired
 	MainService service; 
 	
-	@RequestMapping(value = "/")
+	@RequestMapping(value = "/main")
 	public String main(Model model) throws IOException {
 		Map<String, Object> main1 = service.getSearch("name", "친환경");
 		model.addAttribute("ecoList", main1);
@@ -36,22 +41,63 @@ public class MainController {
 	@RequestMapping(value = "/detail")
 	public String detail(MainDto param, Model model) throws IOException {
 		Map<String, Object> main1 = service.getSearch(param.getCate(), param.getKeyword());
-		model.addAttribute("info", main1);
+		List<Object> list = (List<Object>) main1.get("hits");
+		Map<String, Object> hits = (Map<String, Object>) list.get(0);
+		Map<String, Object> source = (Map<String, Object>) hits.get("_source");
+		model.addAttribute("info", source);
 		
 		return "detail";
 	}
 	
 	@RequestMapping(value = "/mypage")
-	public String mypage(MainDto param, Model model) throws IOException {
-//		Map<String, Object> main1 = service.getSearch(param.getCate(), param.getKeyword());
-//		model.addAttribute("info", main1);
+	public String mypage(MainDto param, Model model, HttpSession session) throws IOException {
+		String userId = (String) session.getAttribute("userId");
+		Map<String, Object> jjinList = service.termSearch("jjim", "user_id", userId);
+		model.addAttribute("jjinList", jjinList);
+		
+		Map<String, Object> buyList = service.termSearch("order", "user_id", userId);
+		model.addAttribute("buyList", buyList);
 		
 		return "mypage";
 	}
 
-	@RequestMapping(value = "/login")
+	@RequestMapping(value = "/")
 	public String login() {
 		return "login";
+	}
+	
+	@RequestMapping(value = "/logout")
+	public String logout(HttpSession session) {
+		session.removeAttribute("userId");
+		
+		return "login";
+	}
+	
+	@RequestMapping(value = "/member/login")
+	public @ResponseBody Map<String, Object> memberLogin(MainDto param, HttpSession session) throws IOException {
+		Map<String, Object> result = new HashMap<String, Object>();
+		if(param.getId().equals(param.getPassword())) {
+			Map<String, Object> main1 = service.userLogin(param.getId(), param.getPassword());
+			
+			if(main1.get("max_score") != null && main1.get("max_score") != "") {
+				List<Object> list = (List<Object>) main1.get("hits");
+				Map<String, Object> hits = (Map<String, Object>) list.get(0);
+				Map<String, Object> source = (Map<String, Object>) hits.get("_source");
+				
+				session.setAttribute("userId", source.get("user_id"));
+				
+				result.put("code", "0000");
+				result.put("message", "success");
+			} else {
+				result.put("code", "9999");
+				result.put("message", "아이디 또는 패스워드가 잘못되었습니다.");
+			}
+		} else {
+			result.put("code", "9999");
+			result.put("message", "아이디 또는 패스워드가 잘못되었습니다.");
+		}
+		
+		return result;
 	}
 
 	@RequestMapping(value = "/test")

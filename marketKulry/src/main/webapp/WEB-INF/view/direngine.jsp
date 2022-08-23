@@ -40,16 +40,25 @@
   
     <script>
         $(function () {
-			$(".goCate").on("click", function(){
-				$("#cate").val("name");
-				$("#keyword").val("친환경");
-				$("#searchForm").attr("action", "/category");
-				$("#searchForm").submit();
-			});
+			
         });
         
+        function goCate(id){
+			$("#cate").val("category");
+			$("#keyword").val(id);
+			$("#searchForm").attr("action", "/category");
+			$("#searchForm").submit();
+		}
+		
+		function goName(id){
+			$("#cate").val("name");
+			$("#keyword").val(id);
+			$("#searchForm").attr("action", "/category");
+			$("#searchForm").submit();
+		}
+        
         function goDetail(id){
-			$("#cate").val("id");
+			$("#cate").val("_id");
 			$("#keyword").val(id);
 			$("#searchForm").attr("action", "/detail");
 			$("#searchForm").submit();
@@ -64,7 +73,7 @@
     
 	<nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
 	  <div class="container">
-	    <a class="navbar-brand" href="/">Kurly Holic</a>
+	    <a class="navbar-brand" href="/main">Kurly Holic</a>
 	    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
 	      <span class="oi oi-menu"></span> Menu
 	    </button>
@@ -72,7 +81,7 @@
 	    <div class="collapse navbar-collapse" id="ftco-nav">
 	      <ul class="navbar-nav ml-auto">
 	        <li class="nav-item"><a href="/mypage" class="nav-link"><span>마이페이지</span></a></li>
-	        <li class="nav-item cta"><a href="/login" class="nav-link"><span>로그인</span></a></li>
+	        <li class="nav-item cta"><a href="/logout" class="nav-link"><span>로그아웃</span></a></li>
 	      </ul>
 	    </div>
 	  </div>
@@ -98,18 +107,18 @@
     		<div class="row justify-content-start mb-5 pb-3">
           <div class="col-md-7 heading-section ftco-animate">
           	<span class="subheading"></span>
-            <h2 class="mb-4"><strong>쌀</strong></h2>
+            <h2 class="mb-4"><strong>친환경</strong></h2>
             <span class="justify-content-md-center align-items-md-	center" style="position: absolute; top: 13px; right: 0; font-size: 20px;">
-			<a href="#" class="goCate" style="font-weight: bold;">더보기</a></span>
+			<a href="#" class="goCate" onclick="javascript:goName('친환경')" style="font-weight: bold;">더보기</a></span>
           </div>
         </div>
     		<div class="row">
     			<div class="col-md-12">
     				<div class="destination-slider owl-carousel ftco-animate">
-	    				<c:forEach var="item" items="${riceList.hits }" begin="0" end="10">
+	    				<c:forEach var="item" items="${ecoList.hits }">
 	    					<div class="item">
 			    				<div class="destination">
-			    					<a href="#" class="img d-flex justify-content-center align-items-center" style="background-image: url(resources/assets/images/kurly/rice1.jpg);" onclick="javascript:goDetail('${item._id }')">
+			    					<a href="#" class="img d-flex justify-content-center align-items-center" style="background-image: url(resources/assets/images/kurly/${item._source.category }.jpg);" onclick="javascript:goDetail('${item._id }')">
 			    						<div class="icon d-flex justify-content-center align-items-center">
 			    							<span class="icon-search2"></span>
 			    						</div>
@@ -132,7 +141,7 @@
     		<div class="row justify-content-start mb-5 pb-3">
           <div class="col-md-7 heading-section ftco-animate">
           	<span class="subheading"></span>
-            <h2 class="mb-4"><strong>친환경</strong></h2>
+            <h2 class="mb-4"><strong>쌀</strong></h2>
             <span class="justify-content-md-center align-items-md-	center" style="position: absolute; top: 13px; right: 0; font-size: 20px;">
 			<a href="#" class="goCate" style="font-weight: bold;">더보기</a></span>
           </div>
@@ -140,10 +149,10 @@
     		<div class="row">
     			<div class="col-md-12">
     				<div class="destination-slider owl-carousel ftco-animate">
-	    				<c:forEach var="item" items="${ecoList.hits }" begin="0" end="10">
+	    				<c:forEach var="item" items="${riceList.hits }">
 	    					<div class="item">
 			    				<div class="destination">
-			    					<a href="#" class="img d-flex justify-content-center align-items-center" style="background-image: url(resources/assets/images/kurly/rice4.jpg);" onclick="javascript:goDetail('${item._id }')">
+			    					<a href="#" class="img d-flex justify-content-center align-items-center" style="background-image: url(resources/assets/images/kurly/${item._source.category }.jpg);" onclick="javascript:goDetail('${item._id }')">
 			    						<div class="icon d-flex justify-content-center align-items-center">
 			    							<span class="icon-search2"></span>
 			    						</div>
@@ -174,10 +183,10 @@
     		<div class="row">
     			<div class="col-md-12">
     				<div class="destination-slider owl-carousel ftco-animate">
-	    				<c:forEach var="item" items="${ecoList.hits }" begin="0" end="10">
+	    				<c:forEach var="item" items="${ecoList.hits }">
 	    					<div class="item">
 			    				<div class="destination">
-			    					<a href="#" class="img d-flex justify-content-center align-items-center" style="background-image: url(resources/assets/images/kurly/rice5.jpg);" onclick="javascript:goDetail('${item._id }')">
+			    					<a href="#" class="img d-flex justify-content-center align-items-center" style="background-image: url(resources/assets/images/kurly/${item._source.category }.jpg);" onclick="javascript:goDetail('${item._id }')">
 			    						<div class="icon d-flex justify-content-center align-items-center">
 			    							<span class="icon-search2"></span>
 			    						</div>
@@ -208,10 +217,10 @@
     		<div class="row">
     			<div class="col-md-12">
     				<div class="destination-slider owl-carousel ftco-animate">
-	    				<c:forEach var="item" items="${ecoList.hits }" begin="0" end="10">
+	    				<c:forEach var="item" items="${ecoList.hits }">
 	    					<div class="item">
 			    				<div class="destination">
-			    					<a href="#" class="img d-flex justify-content-center align-items-center" style="background-image: url(resources/assets/images/kurly/rice6.jpg);" onclick="javascript:goDetail('${item._id }')">
+			    					<a href="#" class="img d-flex justify-content-center align-items-center" style="background-image: url(resources/assets/images/kurly/${item._source.category }.jpg);" onclick="javascript:goDetail('${item._id }')">
 			    						<div class="icon d-flex justify-content-center align-items-center">
 			    							<span class="icon-search2"></span>
 			    						</div>

@@ -40,12 +40,31 @@
   </head>
   <script>
 	$(function () {
-		$(".list_menu li").on("click", function(){
-			$(".list_menu li").removeClass("on");
-			$(".pickContent").hide();
+		$("#goLogin").on("click", function(){
+			if($("#id").val() == ""){
+				alert("id를 입력해주세요");
+				$("#id").focus();
+				return;
+			}
 			
-			$("#"+$(this).attr("class")).show();
-			$(this).addClass("on");
+			if($("#password").val() == ""){
+				alert("id를 입력해주세요");
+				$("#password").focus();
+				return;
+			}
+			
+			$.ajax({
+				type:"post",
+				url:"/member/login",
+				data:$("#loginForm").serialize(),
+				success:function(data){
+					if(data.code == "0000"){
+						location.href = '/main';
+					} else{
+						alert(data.message);
+					}
+				}
+			});
 		});
 	});
   </script>
@@ -71,21 +90,21 @@
 			<div class="css-1bb6q2p etkckst1">
 				<div class="css-a7gihu etkckst0">로그인</div>
 				<div class="css-zmiiuu e11xlc5p0">
-					<form action="/">
+					<form id="loginForm">
 						<div class="css-46b038 e18ap6t76">
 							<div class="css-1accgqb e1uzxhvi6">
 								<div class="css-176lya2 e1uzxhvi3">
-									<input data-testid="input-box" name="id" placeholder="아이디를 입력해주세요" type="text" class="css-1bkd15f e1uzxhvi2" value="">
+									<input data-testid="input-box" name="id" id="id" placeholder="아이디를 입력해주세요" type="text" class="css-1bkd15f e1uzxhvi2" value="">
 								</div>
 							</div>
 							<div class="css-1accgqb e1uzxhvi6">
 								<div class="css-176lya2 e1uzxhvi3">
-									<input data-testid="input-box" name="password" placeholder="비밀번호를 입력해주세요" type="password" class="css-1bkd15f e1uzxhvi2" value="">
+									<input data-testid="input-box" name="password" id="password" placeholder="비밀번호를 입력해주세요" type="password" class="css-1bkd15f e1uzxhvi2" value="">
 								</div>
 							</div>
 						</div>
 						<div class="css-s4i9n2 e18ap6t71">
-							<button class="css-qaxuc4 e4nu7ef3" type="submit" height="54" radius="3">
+							<button class="css-qaxuc4 e4nu7ef3" type="button" height="54" radius="3" id="goLogin">
 								<span class="css-ymwvow e4nu7ef1">로그인</span>
 							</button>
 						</div>

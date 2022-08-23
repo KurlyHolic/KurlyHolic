@@ -39,21 +39,15 @@
     
   	  <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
 	    <div class="container">
-	      <a class="navbar-brand" href="/">Kurly Holic</a>
+	      <a class="navbar-brand" href="/main">Kurly Holic</a>
 	      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
 	        <span class="oi oi-menu"></span> Menu
 	      </button>
 	
 	      <div class="collapse navbar-collapse" id="ftco-nav">
 	        <ul class="navbar-nav ml-auto">
-<!-- 	          <li class="nav-item active"><a href="index.html" class="nav-link">Home</a></li> -->
-<!-- 	          <li class="nav-item"><a href="about.html" class="nav-link">About</a></li> -->
-<!-- 	          <li class="nav-item"><a href="tour.html" class="nav-link">Tour</a></li> -->
-<!-- 	          <li class="nav-item"><a href="hotel.html" class="nav-link">Hotels</a></li> -->
-<!-- 	          <li class="nav-item"><a href="blog.html" class="nav-link">Blog</a></li> -->
-<!-- 	          <li class="nav-item"><a href="contact.html" class="nav-link">Contact</a></li> -->
 	          <li class="nav-item"><a href="/mypage" class="nav-link"><span>마이페이지</span></a></li>
-	          <li class="nav-item cta"><a href="/login" class="nav-link"><span>로그인</span></a></li>
+	          <li class="nav-item cta"><a href="/logout" class="nav-link"><span>로그아웃</span></a></li>
 	        </ul>
 	      </div>
 	    </div>
@@ -61,15 +55,6 @@
     <!-- END nav -->
     
     <div class="hero-wrap" style="background-image: url('resources/assets/images/kurly/bg_kurly.png'); height: 470px !important; ">
-<!--       <div class="overlay"></div> -->
-<!--       <div class="container"> -->
-<!--         <div class="row no-gutters slider-text js-fullheight align-items-center justify-content-center" data-scrollax-parent="true"> -->
-<!--           <div class="col-md-9 ftco-animate text-center" data-scrollax=" properties: { translateY: '70%' }"> -->
-<!--             <p class="breadcrumbs" data-scrollax="properties: { translateY: '30%', opacity: 1.6 }"><span class="mr-2"><a href="index.html">Home</a></span> <span class="mr-2"><a href="blog.html">Blog</a></span> <span>Blog Single</span></p> -->
-<!--             <h1 class="mb-3 bread" data-scrollax="properties: { translateY: '30%', opacity: 1.6 }">Tips &amp; Articles</h1> -->
-<!--           </div> -->
-<!--         </div> -->
-<!--       </div> -->
     </div>
 
 
@@ -77,25 +62,19 @@
       <div class="container">
         <div class="row">
           <div class="col-md-5 ftco-animate">
-          <c:forEach var="item" items="${list.hits }" begin="0" end="10">
-         	<c:if test="${item._source.id == '9721274670' }">
-          		${info.hits._score.name }
-          	</c:if>
-          </c:forEach>
             <p>
-              <img src="resources/assets/images/kurly/rice4.jpg" alt="" class="img-fluid">
+              <img src="resources/assets/images/kurly/${info.category }.jpg" alt="" class="img-fluid">
             </p>
 
           </div> <!-- .col-md-8 -->
           <div class="col-md-7 ftco-animate">
           	<div class="css-1bhm8h2 ezpe9l12">
           		<button class="css-gplgk2 eaxuegm1"></button>
-          		<h2 class="css-1f2zq3n ezpe9l11">[21년 햅쌀] 한반도땅끝현미 10kg</h2>
+          		<h2 class="css-1f2zq3n ezpe9l11">${info.name }</h2>
           		<button class="css-3z91zj e4nu7ef3" type="button" width="56" height="56" radius="3"><span class="css-ymwvow e4nu7ef1"><img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIiIGhlaWdodD0iMzIiIHZpZXdCb3g9IjAgMCAzMiAzMiIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICAgIDxwYXRoIGQ9Ik0yNS44MDcgNy44NjNhNS43NzcgNS43NzcgMCAwIDAtOC4xNzIgMEwxNiA5LjQ5N2wtMS42MzUtMS42MzRhNS43NzkgNS43NzkgMCAxIDAtOC4xNzMgOC4xNzJsMS42MzQgMS42MzQgNy40NjYgNy40NjdhMSAxIDAgMCAwIDEuNDE1IDBzMCAwIDAgMGw3LjQ2Ni03LjQ2N2gwbDEuNjM0LTEuNjM0YTUuNzc3IDUuNzc3IDAgMCAwIDAtOC4xNzJ6IiBzdHJva2U9IiM1RjAwODAiIHN0cm9rZS13aWR0aD0iMS42IiBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPgo8L3N2Zz4K" alt="" class="css-0"></span></button>
           	</div>
             <div class="css-liviaq e1q8tigr7">
-            	<span class="css-5nirzt e1q8tigr6">5%</span>
-            	<span class="css-9pf1ze e1q8tigr5">13,205</span>
+            	<span class="css-9pf1ze e1q8tigr5"><fmt:formatNumber type="number" maxFractionDigits="3" value="${info.reduced_price }" /></span>
             	<span class="css-1x9cx9j e1q8tigr4">원</span>
             </div>
             <div class="css-iqoq9n ejdfx860">

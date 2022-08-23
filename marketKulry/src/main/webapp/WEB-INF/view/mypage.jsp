@@ -46,13 +46,34 @@
 			
 			$("#"+$(this).attr("class")).show();
 			$(this).addClass("on");
+			$("#menuTitle").text($(this).children().text());
+		});
+		
+		$(".priceDown").on("click", function(){
+			alert("가격이 인하 되었습니다.");
+		});
+		
+		$(".reBuy").on("click", function(){
+			alert("재구매 시기가 다가왔습니다.");
 		});
 	});
+	
+	function goDetail(id){
+		$("#cate").val("_id");
+		$("#keyword").val(id);
+		$("#searchForm").attr("action", "/detail");
+		$("#searchForm").submit();
+	}
   </script>
   <body>
+  	<form action="#" id="searchForm" method="post">
+  		<input type="hidden" name="cate" id="cate">
+  		<input type="hidden" name="keyword" id="keyword">
+  	</form>
+  	
   	  <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
 	    <div class="container">
-	      <a class="navbar-brand" href="/">Kurly Holic</a>
+	      <a class="navbar-brand" href="/main">Kurly Holic</a>
 	      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
 	        <span class="oi oi-menu"></span> Menu
 	      </button>
@@ -60,7 +81,7 @@
 	      <div class="collapse navbar-collapse" id="ftco-nav">
 	        <ul class="navbar-nav ml-auto">
 	          <li class="nav-item"><a href="/mypage" class="nav-link"><span>마이페이지</span></a></li>
-	          <li class="nav-item cta"><a href="/login" class="nav-link"><span>로그인</span></a></li>
+	          <li class="nav-item cta"><a href="/logout" class="nav-link"><span>로그아웃</span></a></li>
 	        </ul>
 	      </div>
 	    </div>
@@ -91,57 +112,51 @@
 				</div>
 				<div id="viewPickList" class="page_section">
 					<div class="head_aticle">
-						<h2 class="tit">찜한 상품</h2>
+						<h2 class="tit" id="menuTitle">주문 내역</h2>
 					</div>
 					<div class="pickContent" id="buyList">
-						<div class="productRow">
-							<div class="productThumbnail">
-								<a href="#none">
-									<span class="thumbnailImage" style="background: url(&quot;https://img-cf.kurly.com/shop/data/goods/1637154205701l0.jpg&quot;) 50% 50% / 60px 78px no-repeat;"></span>
-								</a>
-							</div>
-							<div class="productInformation">
-								<div class="productName">
-									<a href="#none" class="css-1xdhyk6 ez0aa4e0">[연세우유 x 마켓컬리] 전용목장우유 22200mL</a>
-								</div>
-								<div class="priceArea">
-									<a href="#none">
-										<span class="discountedPrice">2,070원</span>
+						<c:forEach var="item" items="${buyList.hits }">
+							<div class="productRow">
+								<div class="productThumbnail">
+									<a href="#" onclick="javascript:goDetail('${item._source.item_id }')">
+										<span class="thumbnailImage" style="background: url('resources/assets/images/kurly/${item._source.category }1.jpg') 50% 50% / 60px 78px no-repeat;"></span>
 									</a>
 								</div>
+								<div class="productInformation">
+									<div class="productName">
+										<a href="#" onclick="javascript:goDetail('${item._source.item_id }')" class="css-1xdhyk6 ez0aa4e0">${item._source.item_name }</a>
+									</div>
+								    <div class="priceArea">
+										<span class="discountedPrice"><fmt:formatNumber type="number" maxFractionDigits="3" value="${item._source.reduced_price }" /> 원</span>
+									</div>
+							    </div>
+							    <div class="productButtonArea">
+								  	<button class="reBuy">재구매 알림</button>
+							    </div>
 						    </div>
-						    <div class="productButtonArea">
-							  	<button>삭제</button>
-							  	<button class="buyButton">
-							  		<img src="https://res.kurly.com/mobile/service/common/2022/cart_18x18x5f0080.svg" alt="찜함 상품을 장바구니에 담기">담기
-							  	</button>
-						    </div>
-					    </div>
+					    </c:forEach>
 				    </div>
 				    <div class="pickContent" id="wishList" style="display: none;">
-						<div class="productRow">
-							<div class="productThumbnail">
-								<a href="#none">
-									<span class="thumbnailImage" style="background: url(&quot;https://img-cf.kurly.com/shop/data/goods/1637154205701l0.jpg&quot;) 50% 50% / 60px 78px no-repeat;"></span>
-								</a>
-							</div>
-							<div class="productInformation">
-								<div class="productName">
-									<a href="#none" class="css-1xdhyk6 ez0aa4e0">[연세우유 x 마켓컬리] 전용목장우유 11100mL</a>
-								</div>
-								<div class="priceArea">
-									<a href="#none">
-										<span class="discountedPrice">2,070원</span>
+						<c:forEach var="item" items="${jjinList.hits }">
+							<div class="productRow">
+								<div class="productThumbnail">
+									<a href="#" onclick="javascript:goDetail('${item._source.item_id }')">
+										<span class="thumbnailImage" style="background: url('resources/assets/images/kurly/${item._source.category }1.jpg') 50% 50% / 60px 78px no-repeat;"></span>
 									</a>
 								</div>
+								<div class="productInformation">
+									<div class="productName">
+										<a href="#" onclick="javascript:goDetail('${item._source.item_id }')" class="css-1xdhyk6 ez0aa4e0">${item._source.item_name }</a>
+									</div>
+								    <div class="priceArea">
+										<span class="discountedPrice"><fmt:formatNumber type="number" maxFractionDigits="3" value="${item._source.reduced_price }" /> 원</span>
+									</div>
+							    </div>
+							    <div class="productButtonArea">
+								  	<button class="priceDown">가격인하 알림</button>
+							    </div>
 						    </div>
-						    <div class="productButtonArea">
-							  	<button>삭제</button>
-							  	<button class="buyButton">
-							  		<img src="https://res.kurly.com/mobile/service/common/2022/cart_18x18x5f0080.svg" alt="찜함 상품을 장바구니에 담기">담기
-							  	</button>
-						    </div>
-					    </div>
+					    </c:forEach>
 				    </div>
 			    </div>
 			</div>
