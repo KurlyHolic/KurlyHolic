@@ -1,0 +1,22 @@
+package com.example.demo.kulry;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+@Controller
+public class mainController {
+
+	@RequestMapping(value = "/")
+	public String main(Model model) {
+		
+		
+		return "direngine";
+	}
+	
+	@RequestMapping(value = "/test")
+	public String direngine() {
+		return "main";
+	}
+	
+}

@@ -1,0 +1,23 @@
+@charset "EUC-KR";
+
+.css-e6zlnr {
+    display: flex;
+    flex: 1 1 0%;
+    flex-direction: row;
+    align-items: flex-start;
+    overflow: hidden;
+    width: 100%;
+    padding: 17px 0px 18px;
+    border-top: 1px solid rgb(244, 244, 244);
+    font-size: 14px;
+    letter-spacing: -0.5px;
+}
+
+.css-1ikhfdy {
+    position: relative;
+    top: 1px;
+    width: 128px;
+    height: 100%;
+    color: rgb(102, 102, 102);
+    line-height: 19px;
+}
