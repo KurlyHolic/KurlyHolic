@@ -42,9 +42,13 @@ public class MainController {
 		}else {
 			model.addAttribute("meaningList", "");
 		}
-		
+
 		Map<String, Object> main4 = service.getcateList("http://172.31.7.97:5000/category_rcmd/"+(String) session.getAttribute("userId")+"/"+tab);
 		model.addAttribute("categoryList", main4);
+		
+		Map<String, Object> main5 = service.realTimeBest(tab);
+		model.addAttribute("realTimeBestList", main5);
+		
 		
 		model.addAttribute("tabCode", tab);
 		

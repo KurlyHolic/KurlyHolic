@@ -69,6 +69,7 @@
   	<form action="#" id="searchForm" method="post">
   		<input type="hidden" name="cate" id="cate">
   		<input type="hidden" name="keyword" id="keyword">
+  		<input type="hidden" name="type" id="type">
   	</form>
   	
   	  <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">

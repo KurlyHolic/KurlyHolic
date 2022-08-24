@@ -170,6 +170,39 @@
 	    </section>
     </c:if>
     
+    <section class="ftco-section ftco-destination">
+    	<div class="container">
+    		<div class="row justify-content-start mb-5 pb-3">
+          <div class="col-md-7 heading-section ftco-animate">
+          	<span class="subheading"></span>
+            <h2 class="mb-4"><strong>실시간 베스트</strong></h2>
+            <span class="justify-content-md-center align-items-md-	center" style="position: absolute; top: 13px; right: 0; font-size: 20px;">
+          </div>
+        </div>
+    		<div class="row">
+    			<div class="col-md-12">
+    				<div class="destination-slider owl-carousel ftco-animate">
+	    				<c:forEach var="item" items="${realTimeBestList.hits }">
+	    					<div class="item">
+			    				<div class="destination">
+			    					<a href="#" class="img d-flex justify-content-center align-items-center" style="background-image: url(resources/assets/images/kurly/${item._source.category }1.jpg);" onclick="javascript:goDetail('${item._source.item_id }')">
+			    						<div class="icon d-flex justify-content-center align-items-center">
+			    							<span class="icon-search2"></span>
+			    						</div>
+			    					</a>
+			    					<div class="text p-3">
+			    						<h3><a href="#" onclick="javascript:goDetail('${item._source.item_id }')">${item._source.item_name }</a></h3>
+			    						<span class="listing"><fmt:formatNumber type="number" maxFractionDigits="3" value="${item._source.reduced_price }" /> 원</span>
+			    					</div>
+			    				</div>
+		    				</div>
+		    			</c:forEach>
+    				</div>
+    			</div>
+    		</div>
+    	</div>
+    </section>
+    
     <c:forEach var="info" items="${categoryList }">
 	    <section class="ftco-section ftco-destination">
 	    	<div class="container">
