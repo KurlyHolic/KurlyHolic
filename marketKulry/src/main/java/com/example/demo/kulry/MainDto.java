@@ -3,6 +3,8 @@ package com.example.demo.kulry;
 public class MainDto {
 	public String cate;
 	public String keyword;
+	public String type;
+	public String tab;
 	public String id;
 	public String password;
 	
@@ -17,6 +19,18 @@ public class MainDto {
 	}
 	public void setKeyword(String keyword) {
 		this.keyword = keyword;
+	}
+	public String getType() {
+		return type;
+	}
+	public void setType(String type) {
+		this.type = type;
+	}
+	public String getTab() {
+		return tab;
+	}
+	public void setTab(String tab) {
+		this.tab = tab;
 	}
 	public String getId() {
 		return id;

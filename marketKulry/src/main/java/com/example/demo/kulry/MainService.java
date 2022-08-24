@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 import org.apache.http.HttpHost;
@@ -19,6 +20,7 @@ import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
+import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 
 import com.google.gson.Gson;
@@ -30,12 +32,12 @@ public class MainService {
 	private static String ES_INDEX = "item";
 	private static String ES_USER_INDEX = "user";
     // 외부 IP
-    private static String ES_HOST = "54.176.113.75";
-//    private static String ES_HOST = "172.31.7.97";
+//    private static String ES_HOST = "54.176.113.75";
+    private static String ES_HOST = "172.31.7.97";
     private static int ES_PORT = 9200;
     private static String ES_SCHEME = "http";
     
-    public Map<String, Object> getSearch(String cate, String keyword) throws IOException {
+    public Map<String, Object> getSearch(String cate, String keyword, String type) throws IOException {
 		// TODO Auto-generated method stub
 		HttpHost host = new HttpHost(ES_HOST, ES_PORT, ES_SCHEME);
 		  
@@ -48,10 +50,16 @@ public class MainService {
 
 		System.out.println("cate="+cate);
 		System.out.println("keyword="+keyword);
-		searchSourceBuilder.query(QueryBuilders.matchQuery(cate, keyword));
+		System.out.println("type="+type);
+		
+		if(type.equals("match")) {
+			searchSourceBuilder.query(QueryBuilders.matchQuery(cate, keyword));
+		} else {
+			searchSourceBuilder.query(QueryBuilders.termQuery(cate, keyword));
+		}
 	  
 		// 크기
-		searchSourceBuilder.size(10);
+//		searchSourceBuilder.size(10);
 		searchRequest.source(searchSourceBuilder);
 		
 		SearchResponse searchResponse = restHighLevelClient.search(searchRequest, RequestOptions.DEFAULT);
@@ -70,7 +78,7 @@ public class MainService {
 		);
 		Map<String, Object> hitss = (Map<String, Object>) retMap.get("hits");
 		
-		System.out.println(hitss.get("hits").toString());
+//		System.out.println(hitss.get("hits").toString());
 		
 		restHighLevelClient.close();
 		
@@ -157,14 +165,14 @@ public class MainService {
 		return hitss;
 	}
     
-    public Map<String, Object> getTabList(String userId, String tab) {
-    	String itemRcmdApiUrl = "http://54.176.113.75:5000/item_rcmd/"+userId+"/"+tab;
+    public Map<String, Object> getTabList(String tabUrl) {
+    	String apiUrl = tabUrl;
 
         Map<String, Object> retMap = new HashMap<String, Object>();
         
         HttpURLConnection connection = null;
         try {
-            URL url = new URL(itemRcmdApiUrl);
+            URL url = new URL(apiUrl);
 
             connection = (HttpURLConnection)url.openConnection();
             connection.setRequestMethod("GET");
@@ -178,7 +186,7 @@ public class MainService {
             System.out.println(resultValues);
             String [] resultValue = resultValues.split(", ");
 
-            System.out.println(resultValue[0]);
+//            System.out.println(resultValue[0]);
 
             RestHighLevelClient client = new RestHighLevelClient(
                     RestClient.builder(
@@ -197,22 +205,22 @@ public class MainService {
             // the total number of hits, must be interpreted in the context of totalHits.relation
             long numHits = totalHits.value;
 
-            System.out.println(numHits);
+//            System.out.println(numHits);
 
             // whether the number of hits is accurate (EQUAL_TO) or a lower bound of the total (GREATER_THAN_OR_EQUAL_TO)
             TotalHits.Relation relation = totalHits.relation;
             float maxScore = hits.getMaxScore();
-            System.out.println(maxScore);
+//            System.out.println(maxScore);
 
     		retMap = new Gson().fromJson(
 				searchResponse.toString(), new TypeToken<HashMap<String, Object>>() {}.getType()
     		);
-            
+    		
             SearchHit[] searchHits = hits.getHits();
-            for (SearchHit hit : searchHits) {
-                // do something with the SearchHit
-                System.out.println(hit);
-            }
+//            for (SearchHit hit : searchHits) {
+//                // do something with the SearchHit
+//                System.out.println(hit);
+//            }
 
             client.close();
 
@@ -225,7 +233,172 @@ public class MainService {
                 connection.disconnect();
             }
         }
+
+		Map<String, Object> hitss = (Map<String, Object>) retMap.get("hits");
         
-        return retMap;
+        return hitss;
+    }
+    
+    public Map<String, Object> getmeaningList(String tabUrl) {
+    	String apiUrl = tabUrl;
+
+        Map<String, Object> retMap = new HashMap<String, Object>();
+        
+        HttpURLConnection connection = null;
+        try {
+            URL url = new URL(apiUrl);
+
+            connection = (HttpURLConnection)url.openConnection();
+            connection.setRequestMethod("GET");
+            connection.setRequestProperty("Content-Type", "application/json");
+            connection.setDoOutput(true);
+
+            BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+            String resultValues = in.readLine().replace("[", "").replace("]", "");
+
+            String [] resultValue = resultValues.split(",");
+
+            RestHighLevelClient client = new RestHighLevelClient(
+                    RestClient.builder(
+                            new HttpHost(ES_HOST, ES_PORT, ES_SCHEME)));
+
+            SearchRequest searchRequest = new SearchRequest(ES_INDEX);
+            SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
+            searchSourceBuilder.query(QueryBuilders.termsQuery("_id", resultValue));
+            searchRequest.source(searchSourceBuilder);
+
+            SearchResponse searchResponse = client.search(searchRequest, RequestOptions.DEFAULT);
+
+            SearchHits hits = searchResponse.getHits();
+
+            TotalHits totalHits = hits.getTotalHits();
+            // the total number of hits, must be interpreted in the context of totalHits.relation
+            long numHits = totalHits.value;
+
+//            System.out.println(numHits);
+
+            // whether the number of hits is accurate (EQUAL_TO) or a lower bound of the total (GREATER_THAN_OR_EQUAL_TO)
+            TotalHits.Relation relation = totalHits.relation;
+            float maxScore = hits.getMaxScore();
+//            System.out.println(maxScore);
+
+    		retMap = new Gson().fromJson(
+				searchResponse.toString(), new TypeToken<HashMap<String, Object>>() {}.getType()
+    		);
+    		
+            SearchHit[] searchHits = hits.getHits();
+//            for (SearchHit hit : searchHits) {
+//                // do something with the SearchHit
+//                System.out.println(hit);
+//            }
+
+            client.close();
+
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (connection != null) {
+                connection.disconnect();
+            }
+        }
+
+		Map<String, Object> hitss = (Map<String, Object>) retMap.get("hits");
+        
+        return hitss;
+    }
+    
+    public Map<String, Object> getcateList(String tabUrl){
+    	String categoryRcmdApiUrl = tabUrl;
+
+	    HttpURLConnection connection = null;
+	    
+        Map<String, Object> map = new HashMap<String, Object>();
+	    
+        System.out.println("@@@ categoryRcmdApiUrlTest @@@");
+
+        try {
+            URL url = new URL(categoryRcmdApiUrl);
+
+            connection = (HttpURLConnection)url.openConnection();
+
+            connection.setRequestMethod("GET");
+            connection.setRequestProperty("Content-Type", "application/json");
+            connection.setDoOutput(true);
+
+            //서버에서 보낸 응답 데이터 수신 받기
+            BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+            StringBuilder response = new StringBuilder();
+            String line;
+            while ((line = in.readLine()) != null) {
+                response.append(line);
+                response.append('\r');
+            }
+
+            JSONObject data = new JSONObject(response.toString());
+
+            Iterator<?> keys = data.keys();
+
+
+
+            RestHighLevelClient client = new RestHighLevelClient(
+                    RestClient.builder(
+                            new HttpHost(ES_HOST, ES_PORT, ES_SCHEME)));
+
+
+            while( keys.hasNext() ) {
+                String key = (String) keys.next();
+
+                String resultValues = data.get(key).toString().replace("[", "").replace("]", "");
+
+                String [] resultValue = resultValues.toString().split(",");
+
+
+                SearchRequest searchRequest = new SearchRequest(ES_INDEX);
+                SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
+                searchSourceBuilder.query(QueryBuilders.termsQuery("_id", resultValue));
+                searchRequest.source(searchSourceBuilder);
+
+
+
+                SearchResponse searchResponse = client.search(searchRequest, RequestOptions.DEFAULT);
+
+                SearchHits hits = searchResponse.getHits();
+
+        		Map<String, Object> retMap = new Gson().fromJson(
+        			searchResponse.toString(), new TypeToken<HashMap<String, Object>>() {}.getType()
+        		);
+        		
+                TotalHits totalHits = hits.getTotalHits();
+                // the total number of hits, must be interpreted in the context of totalHits.relation
+                long numHits = totalHits.value;
+
+//                System.out.println(numHits);
+
+                // whether the number of hits is accurate (EQUAL_TO) or a lower bound of the total (GREATER_THAN_OR_EQUAL_TO)
+                TotalHits.Relation relation = totalHits.relation;
+                float maxScore = hits.getMaxScore();
+//                System.out.println(maxScore);
+                SearchHit[] searchHits = hits.getHits();
+//                for (SearchHit hit : searchHits) {
+//                    // do something with the SearchHit
+//                    System.out.println(hit);
+//                }
+
+                map.put(key, retMap.get("hits"));
+            }
+            
+            client.close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (connection != null) {
+                connection.disconnect();
+            }
+        }
+        
+        return map;
     }
 }

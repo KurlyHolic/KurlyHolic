@@ -77,11 +77,18 @@
 
     <section class="ftco-section bg-light">
       <div class="container">
+        <div class="row justify-content-start mb-5 pb-3">
+          <div class="col-md-7 heading-section ftco-animate fadeInUp ftco-animated">
+          	<span class="subheading"></span>
+            <h2 class="mb-4"><strong>${categoryNm }</strong></h2>
+            <span class="justify-content-md-center align-items-md-	center" style="position: absolute; top: 13px; right: 0; font-size: 20px;">
+          </span></div>
+        </div>
         <div class="row d-flex">
 			<c:forEach var="item" items="${list.hits }">
 	          <div class="col-md-3 d-flex ftco-animate">
 	            <div class="blog-entry align-self-stretch" style="width: 100%;">
-	              <a href="#" class="block-20" onclick="javascript:goDetail('${item._id }')" style="background-image: url('resources/assets/images/kurly/${item._source.category }.jpg');">
+	              <a href="#" class="block-20" onclick="javascript:goDetail('${item._id }')" style="background-image: url('resources/assets/images/kurly/${item._source.category }1.jpg');">
 	              </a>
 	              <div class="text p-4 d-block">
 	              	<span class="tag"></span>
@@ -94,21 +101,6 @@
 	          </div>
 	       </c:forEach>
        </div>
-<!--         <div class="row mt-5"> -->
-<!--           <div class="col text-center"> -->
-<!--             <div class="block-27"> -->
-<!--               <ul> -->
-<!--                 <li><a href="#">&lt;</a></li> -->
-<!--                 <li class="active"><span>1</span></li> -->
-<!--                 <li><a href="#">2</a></li> -->
-<!--                 <li><a href="#">3</a></li> -->
-<!--                 <li><a href="#">4</a></li> -->
-<!--                 <li><a href="#">5</a></li> -->
-<!--                 <li><a href="#">&gt;</a></li> -->
-<!--               </ul> -->
-<!--             </div> -->
-<!--           </div> -->
-<!--         </div> -->
       </div>
     </section>
 

@@ -31,11 +31,12 @@ public class cate {
 	    String flaskIp = "54.176.113.75";
 	    String flaskPort = "5000";
 	    String itemRcmdApiUrl = "http://"+flaskIp+":"+flaskPort+"/item_rcmd/"+userId+"/"+tabMode;
-	    String categoryRcmdApiUrl = "http://"+flaskIp+":"+flaskPort+"/category_rcmd/"+userId+"/"+tabMode;
 	    String rebuyRcmdApiUrl = "http://"+flaskIp+":"+flaskPort+"/rebuy_rcmd";
 	    String meaningRcmdApiUrl = "http://"+flaskIp+":"+flaskPort+"/meaning_rcmd";
 	    String updateViewApiUrl = "http://"+flaskIp+":"+flaskPort+"/update_view/"+userId+"/"+itemId;
 
+	    String categoryRcmdApiUrl = "http://"+flaskIp+":"+flaskPort+"/category_rcmd/"+userId+"/"+tabMode;
+	    
 	    HttpURLConnection connection = null;
 	    
         System.out.println("@@@ categoryRcmdApiUrlTest @@@");

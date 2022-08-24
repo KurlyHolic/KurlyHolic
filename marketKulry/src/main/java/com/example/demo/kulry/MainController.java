@@ -7,6 +7,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
+import org.elasticsearch.search.SearchHit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,27 +21,49 @@ public class MainController {
 	MainService service; 
 	
 	@RequestMapping(value = "/main")
-	public String main(Model model) throws IOException {
-		Map<String, Object> main1 = service.getSearch("name", "친환경");
+	public String main(MainDto param, Model model, HttpSession session) throws IOException {
+		// 친황경 목록
+		Map<String, Object> main1 = service.getSearch("name", "친환경", "match");
 		model.addAttribute("ecoList", main1);
 		
-		Map<String, Object> main2 = service.getSearch("category", "쌀");
-		model.addAttribute("riceList", main2);
+		String tab = (String) session.getAttribute("tab");
+		
+		if(param.getTab() != null) {
+			tab = param.getTab();
+			session.setAttribute("tab", tab);
+		}
+
+		Map<String, Object> main2 = service.getTabList("http://172.31.7.97:5000/item_rcmd/"+(String) session.getAttribute("userId")+"/"+tab);
+		model.addAttribute("suggestionList", main2);
+		
+		if(!tab.equals("3")) {
+			Map<String, Object> main3 = service.getmeaningList("http://172.31.7.97:5000/meaning_rcmd");
+			model.addAttribute("meaningList", main3);
+		}else {
+			model.addAttribute("meaningList", "");
+		}
+		
+		Map<String, Object> main4 = service.getcateList("http://172.31.7.97:5000/category_rcmd/"+(String) session.getAttribute("userId")+"/"+tab);
+		model.addAttribute("categoryList", main4);
+		
+		model.addAttribute("tabCode", tab);
 		
 		return "direngine";
 	}
 
 	@RequestMapping(value = "/category")
 	public String category(MainDto param, Model model) throws IOException {
-		Map<String, Object> main1 = service.getSearch(param.getCate(), param.getKeyword());
-		model.addAttribute("list", main1);
+		Map<String, Object> main = new HashMap<String, Object>();
+		main = service.getSearch(param.getCate(), param.getKeyword(), param.getType());
+		model.addAttribute("list", main);
+		model.addAttribute("categoryNm", param.keyword);
 		
 		return "category";
 	}
 
 	@RequestMapping(value = "/detail")
 	public String detail(MainDto param, Model model) throws IOException {
-		Map<String, Object> main1 = service.getSearch(param.getCate(), param.getKeyword());
+		Map<String, Object> main1 = service.getSearch(param.getCate(), param.getKeyword(), param.getType());
 		List<Object> list = (List<Object>) main1.get("hits");
 		Map<String, Object> hits = (Map<String, Object>) list.get(0);
 		Map<String, Object> source = (Map<String, Object>) hits.get("_source");
@@ -83,8 +106,9 @@ public class MainController {
 				List<Object> list = (List<Object>) main1.get("hits");
 				Map<String, Object> hits = (Map<String, Object>) list.get(0);
 				Map<String, Object> source = (Map<String, Object>) hits.get("_source");
-				
+
 				session.setAttribute("userId", source.get("user_id"));
+				session.setAttribute("tab", "1");
 				
 				result.put("code", "0000");
 				result.put("message", "success");

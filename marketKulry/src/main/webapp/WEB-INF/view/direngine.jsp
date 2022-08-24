@@ -40,18 +40,11 @@
   
     <script>
         $(function () {
-			
+			$("#"+$("#tab").val()).css("color", "#f85959");
         });
         
-        function goCate(id){
-			$("#cate").val("category");
-			$("#keyword").val(id);
-			$("#searchForm").attr("action", "/category");
-			$("#searchForm").submit();
-		}
-		
-		function goName(id){
-			$("#cate").val("name");
+        function goCate(cate, id, type){
+			$("#cate").val(cate);
 			$("#keyword").val(id);
 			$("#searchForm").attr("action", "/category");
 			$("#searchForm").submit();
@@ -63,12 +56,20 @@
 			$("#searchForm").attr("action", "/detail");
 			$("#searchForm").submit();
 		}
+        
+        function goTab(tab){
+			$("#tab").val(tab);
+			$("#searchForm").attr("action", "/main");
+			$("#searchForm").submit();
+		}
     </script>
   
   <body>
   	<form action="#" id="searchForm" method="post">
   		<input type="hidden" name="cate" id="cate">
   		<input type="hidden" name="keyword" id="keyword">
+  		<input type="hidden" name="type" id="type">
+  		<input type="hidden" name="tab" id="tab" value="${tabCode }">
   	</form>
     
 	<nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
@@ -95,9 +96,9 @@
     	<div class="SectionTitle css-2u0lrw ej3ms6t2">
     		<div class="css-og139h e10b7g5l1">
     			<span class="css-r6zrzr ej3ms6t1">
-    				<a href="#">전체</a> | 
-    				<a href="#">푸드컬리</a> | 
-    				<a href="#">리빙컬리</a> </span>
+    				<a href="#" onclick="goTab('1')" id="1">전체</a> | 
+    				<a href="#" onclick="goTab('2')" id="2">푸드컬리</a> | 
+    				<a href="#" onclick="goTab('3')" id="3">리빙컬리</a> </span>
     		</div>
     	</div>
     </div>
@@ -107,18 +108,17 @@
     		<div class="row justify-content-start mb-5 pb-3">
           <div class="col-md-7 heading-section ftco-animate">
           	<span class="subheading"></span>
-            <h2 class="mb-4"><strong>친환경</strong></h2>
+            <h2 class="mb-4"><strong>이 상품 어때요</strong></h2>
             <span class="justify-content-md-center align-items-md-	center" style="position: absolute; top: 13px; right: 0; font-size: 20px;">
-			<a href="#" class="goCate" onclick="javascript:goName('친환경')" style="font-weight: bold;">더보기</a></span>
           </div>
         </div>
     		<div class="row">
     			<div class="col-md-12">
     				<div class="destination-slider owl-carousel ftco-animate">
-	    				<c:forEach var="item" items="${ecoList.hits }">
+	    				<c:forEach var="item" items="${suggestionList.hits }">
 	    					<div class="item">
 			    				<div class="destination">
-			    					<a href="#" class="img d-flex justify-content-center align-items-center" style="background-image: url(resources/assets/images/kurly/${item._source.category }.jpg);" onclick="javascript:goDetail('${item._id }')">
+			    					<a href="#" class="img d-flex justify-content-center align-items-center" style="background-image: url(resources/assets/images/kurly/${item._source.category }1.jpg);" onclick="javascript:goDetail('${item._id }')">
 			    						<div class="icon d-flex justify-content-center align-items-center">
 			    							<span class="icon-search2"></span>
 			    						</div>
@@ -136,107 +136,75 @@
     	</div>
     </section>
     
-    <section class="ftco-section ftco-destination">
-    	<div class="container">
-    		<div class="row justify-content-start mb-5 pb-3">
-          <div class="col-md-7 heading-section ftco-animate">
-          	<span class="subheading"></span>
-            <h2 class="mb-4"><strong>쌀</strong></h2>
-            <span class="justify-content-md-center align-items-md-	center" style="position: absolute; top: 13px; right: 0; font-size: 20px;">
-			<a href="#" class="goCate" style="font-weight: bold;">더보기</a></span>
-          </div>
-        </div>
-    		<div class="row">
-    			<div class="col-md-12">
-    				<div class="destination-slider owl-carousel ftco-animate">
-	    				<c:forEach var="item" items="${riceList.hits }">
-	    					<div class="item">
-			    				<div class="destination">
-			    					<a href="#" class="img d-flex justify-content-center align-items-center" style="background-image: url(resources/assets/images/kurly/${item._source.category }.jpg);" onclick="javascript:goDetail('${item._id }')">
-			    						<div class="icon d-flex justify-content-center align-items-center">
-			    							<span class="icon-search2"></span>
-			    						</div>
-			    					</a>
-			    					<div class="text p-3">
-			    						<h3><a href="#" onclick="javascript:goDetail('${item._id }')">${item._source.name }</a></h3>
-			    						<span class="listing"><fmt:formatNumber type="number" maxFractionDigits="3" value="${item._source.reduced_price }" /> 원</span>
-			    					</div>
+    <c:if test="${!empty meaningList}">
+	    <section class="ftco-section ftco-destination">
+	    	<div class="container">
+	    		<div class="row justify-content-start mb-5 pb-3">
+	          <div class="col-md-11 heading-section ftco-animate">
+	          	<span class="subheading"></span>
+	            <h2 class="mb-4"><strong>가치소비</strong></h2>
+	          </div>
+	        </div>
+	    		<div class="row">
+	    			<div class="col-md-12">
+	    				<div class="destination-slider owl-carousel ftco-animate">
+		    				<c:forEach var="item" items="${meaningList.hits }">
+		    					<div class="item">
+				    				<div class="destination">
+				    					<a href="#" class="img d-flex justify-content-center align-items-center" style="background-image: url(resources/assets/images/kurly/${item._source.category }1.jpg);" onclick="javascript:goDetail('${item._id }')">
+				    						<div class="icon d-flex justify-content-center align-items-center">
+				    							<span class="icon-search2"></span>
+				    						</div>
+				    					</a>
+				    					<div class="text p-3">
+				    						<h3><a href="#" onclick="javascript:goDetail('${item._id }')">${item._source.name }</a></h3>
+				    						<span class="listing"><fmt:formatNumber type="number" maxFractionDigits="3" value="${item._source.reduced_price }" /> 원</span>
+				    					</div>
+				    				</div>
 			    				</div>
-		    				</div>
-		    			</c:forEach>
-    				</div>
-    			</div>
-    		</div>
-    	</div>
-    </section>
+			    			</c:forEach>
+	    				</div>
+	    			</div>
+	    		</div>
+	    	</div>
+	    </section>
+    </c:if>
     
-    <section class="ftco-section ftco-destination">
-    	<div class="container">
-    		<div class="row justify-content-start mb-5 pb-3">
-          <div class="col-md-7 heading-section ftco-animate">
-          	<span class="subheading"></span>
-            <h2 class="mb-4"><strong>40대가 선택한 상품</strong></h2>
-            <span class="justify-content-md-center align-items-md-	center" style="position: absolute; top: 13px; right: 0; font-size: 20px;">
-			<a href="#" class="goCate" style="font-weight: bold;">더보기</a></span>
-          </div>
-        </div>
-    		<div class="row">
-    			<div class="col-md-12">
-    				<div class="destination-slider owl-carousel ftco-animate">
-	    				<c:forEach var="item" items="${ecoList.hits }">
-	    					<div class="item">
-			    				<div class="destination">
-			    					<a href="#" class="img d-flex justify-content-center align-items-center" style="background-image: url(resources/assets/images/kurly/${item._source.category }.jpg);" onclick="javascript:goDetail('${item._id }')">
-			    						<div class="icon d-flex justify-content-center align-items-center">
-			    							<span class="icon-search2"></span>
-			    						</div>
-			    					</a>
-			    					<div class="text p-3">
-			    						<h3><a href="#" onclick="javascript:goDetail('${item._id }')">${item._source.name }</a></h3>
-			    						<span class="listing"><fmt:formatNumber type="number" maxFractionDigits="3" value="${item._source.reduced_price }" /> 원</span>
-			    					</div>
+    <c:forEach var="info" items="${categoryList }">
+	    <section class="ftco-section ftco-destination">
+	    	<div class="container">
+	    		<div class="row justify-content-start mb-5 pb-3">
+	          <div class="col-md-11 heading-section ftco-animate">
+	          	<span class="subheading"></span>
+	            <h2 class="mb-4"><strong>${info.key }</strong></h2>
+	            <span class="justify-content-md-center align-items-md-center main-btn" style="position: absolute; top: 13px; right: 0; font-size: 20px;">
+				<a href="#" class="main-btn" onclick="javascript:goCate('category', '${info.key }', 'term')" style="font-weight: bold;">더보기</a></span>
+	          </div>
+	        </div>
+	    		<div class="row">
+	    			<div class="col-md-12">
+	    				<div class="destination-slider owl-carousel ftco-animate">
+		    				<c:forEach var="item" items="${info.value.hits }">
+		    					<div class="item">
+				    				<div class="destination">
+				    					<a href="#" class="img d-flex justify-content-center align-items-center" style="background-image: url(resources/assets/images/kurly/${item._source.category }1.jpg);" onclick="javascript:goDetail('${item._id }')">
+				    						<div class="icon d-flex justify-content-center align-items-center">
+				    							<span class="icon-search2"></span>
+				    						</div>
+				    					</a>
+				    					<div class="text p-3">
+				    						<h3><a href="#" onclick="javascript:goDetail('${item._id }')">${item._source.name }</a></h3>
+				    						<span class="listing"><fmt:formatNumber type="number" maxFractionDigits="3" value="${item._source.reduced_price }" /> 원</span>
+				    					</div>
+				    				</div>
 			    				</div>
-		    				</div>
-		    			</c:forEach>
-    				</div>
-    			</div>
-    		</div>
-    	</div>
-    </section>
-    
-    <section class="ftco-section ftco-destination">
-    	<div class="container">
-    		<div class="row justify-content-start mb-5 pb-3">
-          <div class="col-md-7 heading-section ftco-animate">
-          	<span class="subheading"></span>
-            <h2 class="mb-4"><strong>상품추천 top10</strong></h2>
-            <span class="justify-content-md-center align-items-md-	center" style="position: absolute; top: 13px; right: 0; font-size: 20px;">
-			<a href="#" class="goCate" style="font-weight: bold;">더보기</a></span>
-          </div>
-        </div>
-    		<div class="row">
-    			<div class="col-md-12">
-    				<div class="destination-slider owl-carousel ftco-animate">
-	    				<c:forEach var="item" items="${ecoList.hits }">
-	    					<div class="item">
-			    				<div class="destination">
-			    					<a href="#" class="img d-flex justify-content-center align-items-center" style="background-image: url(resources/assets/images/kurly/${item._source.category }.jpg);" onclick="javascript:goDetail('${item._id }')">
-			    						<div class="icon d-flex justify-content-center align-items-center">
-			    							<span class="icon-search2"></span>
-			    						</div>
-			    					</a>
-			    					<div class="text p-3">
-			    						<h3><a href="#" onclick="javascript:goDetail('${item._id }')">${item._source.name }</a></h3>
-			    						<span class="listing"><fmt:formatNumber type="number" maxFractionDigits="3" value="${item._source.reduced_price }" /> 원</span>
-			    					</div>
-			    				</div>
-		    				</div>
-		    			</c:forEach>
-    				</div>
-    			</div>
-    		</div>
-    	</div>
-    </section>
+			    			</c:forEach>
+	    				</div>
+	    			</div>
+	    		</div>
+	    	</div>
+	    </section>
+    </c:forEach>
 
     <footer class="ftco-footer ftco-bg-dark ftco-section">
       <div class="container">

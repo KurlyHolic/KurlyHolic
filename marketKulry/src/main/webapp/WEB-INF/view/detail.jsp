@@ -63,7 +63,7 @@
         <div class="row">
           <div class="col-md-5 ftco-animate">
             <p>
-              <img src="resources/assets/images/kurly/${info.category }.jpg" alt="" class="img-fluid">
+              <img src="resources/assets/images/kurly/${info.category }1.jpg" alt="" class="img-fluid">
             </p>
 
           </div> <!-- .col-md-8 -->
